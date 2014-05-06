@@ -69,7 +69,7 @@ class Data:
                     print '  API call: %s' % (r.url)
                     apidata = r.text
                 except:
-                    print 'Goodreads took longer than %s seconds to respond, aborting remaining API calls' % (TIMEOUT)
+                    print 'Goodreads took longer than %s seconds to respond, aborting remaining API calls' % (self.TIMEOUT)
                     break
                 #Parsing and getting the API data we want
                 try:

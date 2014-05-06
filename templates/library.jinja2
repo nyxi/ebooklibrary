@@ -1,0 +1,30 @@
+<table class="table table-striped" id="libtable">
+    <thead><tr>
+        <th>Author</th>
+        <th>Title</th>
+        <th>Downloads</th>
+        <th>Rating</th>
+        <th>Votes</th>
+    </tr></thead><tbody>
+{% for item in data -%}
+    <tr>
+        <td>{{ item['author'] }}</td>
+        <td><a class="btn btn-info btn-xs" role="button" style="margin-right:10px" href="https://www.goodreads.com/book/show/{{ item['gr_book_id'] }}">Details</a>{{ item['title'] }}</td>
+        <td>
+            {% for f in item['filepath'] if 'gr_book_id' in item -%}
+                {% if f[-4:] == 'mobi' -%}
+                    <a href="/download?id={{ item['gr_book_id'] }}&format=mobi" class="btn btn-success btn-xs" role="button">mobi</a>
+                {% elif f[-4:] == 'epub' %}
+                    <a href="/download?id={{ item['gr_book_id'] }}&format=epub" class="btn btn-default btn-xs" role="button">epub</a>
+                {% elif f[-4:] == 'azw3' %}
+                    <a href="/download?id={{ item['gr_book_id'] }}&format=azw3" class="btn btn-primary btn-xs" role="button">azw3</a>
+                {% elif f[-3:] == 'azw' %}
+                    <a href="/download?id={{ item['gr_book_id'] }}&format=azw" class="btn btn-primary btn-xs" role="button">azw</a>
+                {%- endif %}
+            {%- endfor %}
+        </td>
+        <td>{{ item['average_rating'] }}</td>
+        <td>{{ item['ratings_count'] }}</td>
+    </tr>
+{%- endfor %}
+</tbody></table>

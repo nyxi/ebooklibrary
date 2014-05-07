@@ -10,7 +10,7 @@
     </tr></thead><tbody>
 {% for item in data -%}
     <tr>
-        <td>{{ item['author'] }}</td>
+        <td><a href="/author/{{ item['gr_author_id'] }}">{{ item['author'] }}</a></td>
         <td><a class="btn btn-info btn-xs" role="button" style="margin-right:10px" href="https://www.goodreads.com/book/show/{{ item['gr_book_id'] }}">Details</a>{{ item['title'] }}</td>
         <td>
             {% for f in item['filepath'] if 'gr_book_id' in item -%}

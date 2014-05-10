@@ -12,7 +12,7 @@ Usage
 On the first run it can take a long time for the website to become available since it will do API calls for all your ebook files, progress can be tracked in the console.
 
 1. pip install -r requirements.txt
-2. Set your book directory and Goodreads API key in grdata.py
+2. Edit and save "config.sample" as "config"
 3. python front.py
 
 By default the web page is served on port 5001.

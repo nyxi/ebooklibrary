@@ -6,14 +6,18 @@ from os import path
 import requests
 import xml.etree.ElementTree as ET
 from time import sleep
+import ConfigParser
 
 
 class Data:
-    BOOKDIR = '/home/nas/books'
-    FORMATS = ['.epub', '.mobi', '.azw3', '.azw']
-    APIKEY = ''
-    APIURL = 'https://www.goodreads.com/search.xml'
-    TIMEOUT = 15
+    def configure(self):
+        config = ConfigParser.SafeConfigParser()
+        config.read('config')
+        self.BOOKDIR = config.get('data', 'bookdir')
+        self.FORMATS = config.get('data', 'formats').split(',')
+        self.APIKEY = config.get('data', 'apikey')
+        self.APIURL = config.get('data', 'apiurl')
+        self.TIMEOUT = config.getint('data', 'timeout')
 
     def isbn_update(self):
         isbnlist = []
@@ -154,5 +158,6 @@ class Data:
             f.write(str(self.itemdata))
 
     def __init__(self):
+        self.configure()
         self.itemdata = []
         self.update()

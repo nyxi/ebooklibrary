@@ -1,0 +1,14 @@
+[web]
+password: verysecreT
+
+[data]
+#Path to your ebook directory
+bookdir: /home/nas/books
+#Allowed file formats
+formats: .epub,.mobi,.azw,.azw3
+#Your API key from Goodreads
+apikey: sdwrDSFi454536
+
+#Should probably not change the below settings
+apiurl: https://www.goodreads.com/search.xml
+timeout: 15

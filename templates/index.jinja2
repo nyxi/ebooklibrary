@@ -22,6 +22,8 @@
     <div class="panel panel-default" style="margin-top:20px;">
       <div class="panel-heading"><h1 class="panel-title">Your Library</h1></div>
       <div class="panel-body">
+        {% if success -%}<div class="alert alert-success" role="alert">{{ success }}</div>{%- endif %}
+        {% if error -%}<div class="alert alert-error" role="alert">{{ error }}</div>{%- endif %}
         {% include 'selects.jinja2' %}
         {% include 'library.jinja2' %}
       </div>

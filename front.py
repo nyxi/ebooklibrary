@@ -1,19 +1,25 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import ConfigParser
 from flask import abort, Flask, redirect, render_template
 from flask import request, send_from_directory, session
 import grdata
-from os import path, urandom
-import ConfigParser
+import os
+import subprocess
+from werkzeug import secure_filename
 
 #Get password from the config file
 config = ConfigParser.SafeConfigParser()
 config.read('config')
-password = config.get('web', 'password')
+PASSWORD = config.get('web', 'password')
+KSN = config.get('web', 'kindleserial')
+ALLOWED_FORMATS = config.get('data', 'formats').split(',')
+BOOKDIR = config.get('data', 'bookdir')
 #Configure Flask
 app = Flask(__name__)
-app.secret_key = urandom(64)
+app.secret_key = os.urandom(64)
+app.config['UPLOAD_FOLDER'] = 'static/tmp'
 #Create our data object
 data = grdata.Data()
 
@@ -39,18 +45,54 @@ def loginpage():
 @app.route('/login/', methods=['POST'])
 def login():
     if 'password' in request.form:
-        if request.form['password'] == password:
+        if request.form['password'] == PASSWORD:
             session['logon'] = True
             return redirect('/')
     return render_template('login.jinja2', fail=True)
 
 @app.route('/', methods=['GET'])
-def index():
+def index(success=None, error=None):
     if not 'logon' in session:
         return redirect('/login/')
     data.update()
     titles, authors = sortselects(data.itemdata)
-    return render_template('index.jinja2', data=data.itemdata, authors=authors, titles=titles)
+    return render_template('index.jinja2', data=data.itemdata, authors=authors, titles=titles, success=success, error=error)
+
+@app.route('/', methods=['POST'])
+def upload():
+    if not 'logon' in session:
+        return redirect('/login/')
+    bookfile = request.files['file']
+    if bookfile:
+        if os.path.splitext(bookfile.filename)[1] in ALLOWED_FORMATS:
+            filename = secure_filename(bookfile.filename)
+            try:
+                bookfile.save('%s/%s' % (app.config['UPLOAD_FOLDER'], filename))
+            except:
+                error = 'Error saving uploaded file to disk, permissions?'
+                return index(error=error)
+            try:
+                infile = '%s/%s' % (app.config['UPLOAD_FOLDER'], filename)
+                outdir = app.config['UPLOAD_FOLDER']
+                subprocess.call(['./dedrm.sh', KSN, infile, outdir])
+                os.remove(infile)
+                newfile = '%s_nodrm%s' % (os.path.splitext(filename)[0], os.path.splitext(filename)[1])
+                if os.path.isfile('%s/%s' % (outdir, newfile)):
+                    os.rename('%s/%s' % (outdir, newfile), '%s/%s' % (BOOKDIR, filename))
+                    success = 'Successfully uploaded the file'
+                    return index(success=success)
+                else:
+                    error = 'Error at dedrm stage'
+                    return index(error=error)
+            except:
+                error = 'Error at dedrm stage'
+                return index(error=error)
+        else:
+            error = 'File format not allowed'
+            return index(error=error)
+    else:
+        error = 'Nothing uploaded?'
+        return index(error=error)
 
 @app.route('/author/<author>', methods=['GET'])
 def authorpage(author):
@@ -75,7 +117,7 @@ def download():
             if 'gr_book_id' in item and item['gr_book_id'] == gr_book_id:
                 for f in item['filepath']:
                     if f.endswith(filetype) and '.%s' % (filetype) in data.FORMATS:
-                        return send_from_directory(path.split(f)[0], path.split(f)[1], as_attachment=True, attachment_filename=path.split(f)[1])
+                        return send_from_directory(os.path.split(f)[0], os.path.split(f)[1], as_attachment=True, attachment_filename=os.path.split(f)[1])
         abort(404)
     else:
         abort(404)

@@ -1,5 +1,9 @@
 [web]
+#Password to the website
 password: verysecreT
+#Your Kindle serial
+#Needed to remove DRM from uploaded books
+kindleserial: xxx
 
 [data]
 #Path to your ebook directory

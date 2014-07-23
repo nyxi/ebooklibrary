@@ -89,6 +89,7 @@ class Data:
                 #Get rid of some unnecessary chars in the search string
                 q = data['filenoext'].replace(',', ' ')
                 q = q.replace('-', ' ')
+                q = q.replace('_', ' ')
                 q = ' '.join(q.split())
             else:
                 q = data['isbn']
@@ -120,6 +121,8 @@ class Data:
                      data['image_url'] = best_book.find('image_url').text
                      break
         except:
+            return False
+        if not 'gr_book_id' in data:
             return False
         #Check if we already have this API data
         bookexists = False

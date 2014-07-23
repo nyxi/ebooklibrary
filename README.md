@@ -11,8 +11,18 @@ Usage
 -----
 On the first run it can take a long time for the website to become available since it will do API calls for all your ebook files, progress can be tracked in the console.
 
-1. pip install -r requirements.txt
+Step 3 is optional but uploading files won't work without it unless you remove a line or two in `front.py`
+
+1. `pip install -r requirements.txt`
 2. Edit and save "config.sample" as "config"
-3. python front.py
+3. Download the dedrm tools from [Apprentice Alf](http://apprenticealf.wordpress.com/) and edit `dedrm.sh` accordingly
+4. `python front.py`
 
 By default the web page is served on port 5001.
+
+File names
+-----
+The application works best if you name your files as below:
+`<a_surname>, <a_firstname> - <title>.<format>`
+
+Using underscores instead of white space is fine.

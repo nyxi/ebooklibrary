@@ -1,12 +1,23 @@
-<select class="selectpicker" id="titleList" onchange="titleGo()" data-live-search="true" data-style="btn-primary" data-size="9">
-<option>View book on Goodreads</option>
-{% for title in titles -%}
-<option value="{{ title.split()[-1] }}">{{ title.split()[0:-1]|join(' ') }}</option>
-{%- endfor %}
-</select>
-<select class="selectpicker" id="authorList" onchange="authorGo()" data-live-search="true" data-style="btn-success" data-size="9">
-<option>Search author</option>
-{% for author in authors %}
-<option value="{{ author.split()[-1] }}">{{ author.split()[0:-1]|join(' ') }}</option>
-{% endfor %}
-</select>
+<form action="/" method="post" enctype="multipart/form-data" class="form-inline" role="form">
+  <div class="form-group">
+    <select class="selectpicker" id="titleList" onchange="titleGo()" data-live-search="true" data-style="btn-primary" data-size="9">
+      <option>View book on Goodreads</option>
+      {% for title in titles -%}
+        <option value="{{ title.split()[-1] }}">{{ title.split()[0:-1]|join(' ') }}</option>
+      {%- endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <select class="selectpicker" id="authorList" onchange="authorGo()" data-live-search="true" data-style="btn-success" data-size="9">
+      <option>Search author</option>
+      {% for author in authors %}
+        <option value="{{ author.split()[-1] }}">{{ author.split()[0:-1]|join(' ') }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="upload">File to upload</label>
+    <input type="file" name="file" id="upload">
+  </div>
+  <button type="submit" class="btn btn-default">Upload</button>
+</form>

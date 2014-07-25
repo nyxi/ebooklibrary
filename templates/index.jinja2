@@ -26,8 +26,12 @@
       <div class="panel-body">
         {% if success -%}<div class="alert alert-success" role="alert">{{ success }}</div>{%- endif %}
         {% if error -%}<div class="alert alert-error" role="alert">{{ error }}</div>{%- endif %}
-        {% include 'selects.jinja2' %}
-        {% include 'library.jinja2' %}
+        {% if isbn -%}
+          {% include 'isbnform.jinja2' %}
+        {% else %}
+          {% include 'selects.jinja2' %}
+          {% include 'library.jinja2' %}
+        {%- endif %}
       </div>
     </div>
   </div>

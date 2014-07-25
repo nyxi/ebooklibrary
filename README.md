@@ -11,7 +11,7 @@ Usage
 -----
 On the first run it can take a long time for the website to become available since it will do API calls for all your ebook files, progress can be tracked in the console.
 
-Step 3 is optional but uploading files won't work without it unless you remove a line or two in `front.py`
+Step 3 is __optional__ but necessary to remove DRM from Amazon ebooks.
 
 1. `pip install -r requirements.txt`
 2. Edit and save `config.sample` as `config`

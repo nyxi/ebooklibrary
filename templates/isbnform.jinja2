@@ -1,0 +1,10 @@
+<p>Here you can edit the contents of the isbn file.</p>
+{% if noresults -%}<div class="alert alert-warning" role="alert"><strong>Files we could not find data for from the Goodreads API:</strong><br />
+{% for item in noresults %}{{ item }}<br />{% endfor %}</div>{%- endif %}
+<form action="/isbn/" method="post" role="form">
+  <div class="form-group">
+    <label for="isbneditor">ISBN file</label>
+    <textarea class="form-control" rows="16" id="isbneditor" name="isbn">{{ isbn }}</textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Apply changes</button>
+</form>

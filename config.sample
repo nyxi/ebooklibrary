@@ -5,7 +5,8 @@ password: verysecreT
 port: 5001
 #Your Kindle serial
 #Needed to remove DRM from uploaded books
-kindleserial: xxx
+#Leave at "no" to disable dedrm functionality
+kindleserial: no
 
 [data]
 #Path to your ebook directory

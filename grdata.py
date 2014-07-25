@@ -120,6 +120,9 @@ class Data:
                      data['author'] = best_book.find('author')[1].text
                      data['image_url'] = best_book.find('image_url').text
                      break
+            else:
+                if not data['filenoext'] in self.noresults:
+                    self.noresults.append(data['filenoext'])
         except:
             return False
         if not 'gr_book_id' in data:
@@ -138,6 +141,7 @@ class Data:
             self.itemdata.append(data)
 
     def update(self):
+        self.noresults = []
         self.isbnlist = self.isbn_update()
 
         if path.isfile('db') and self.itemdata == []:

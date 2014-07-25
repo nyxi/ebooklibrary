@@ -72,6 +72,14 @@ def upload():
             except:
                 error = 'Error saving uploaded file to disk, permissions?'
                 return index(error=error)
+            if KSN == 'no':
+                try:
+                    os.rename('%s/%s' % (app.config['UPLOAD_FOLDER'], filename), '%s/%s' % (BOOKDIR, filename.replace('_', ' ')))
+                    success = 'Successfully uploaded the file'
+                    return index(success=success)
+                except:
+                    error = 'Could not move the file from the temporary upload location to the books directory, permissions issue?'
+                    return index(error=error)
             try:
                 infile = '%s/%s' % (app.config['UPLOAD_FOLDER'], filename)
                 outdir = app.config['UPLOAD_FOLDER']
@@ -122,6 +130,31 @@ def download():
         abort(404)
     else:
         abort(404)
+
+@app.route('/isbn/', methods=['GET'])
+def isbn_editor(success=None, error=None):
+    if not 'logon' in session:
+        return redirect('/login/')
+    with open('isbn', 'r') as f:
+        isbn = f.read()
+    return render_template('index.jinja2', isbn=isbn, success=success, error=error, noresults=data.noresults)
+
+@app.route('/isbn/', methods=['POST'])
+def isbn_edit():
+    if not 'logon' in session:
+        return redirect('/login/')
+    if 'isbn' in request.form:
+        try:
+            with open('isbn', 'w') as f:
+                f.write(request.form['isbn'])
+            success = 'Successfully updated the isbn file, result shown below.'
+            return isbn_editor(success=success)
+        except:
+            error = 'Something went wrong when updating the file, permissions?'
+            return isbn_editor(error=error)
+    else:
+        error = 'No isbn post data to process'
+        return isbn_editor(error=error)
 
 
 if __name__ == "__main__":

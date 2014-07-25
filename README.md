@@ -5,6 +5,7 @@ A basic Flask application providing easy access to your ebook backups on disk wi
 
 Uses the Bootstrap web framework for the HTML/CSS stuff.
 
+Up to date screenshot always available [here](http://nyxi.eu/pics/projects/library.jpg).
 ![ScreenShot](http://nyxi.eu/pics/projects/library.jpg)
 
 Usage

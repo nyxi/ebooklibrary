@@ -1,6 +1,8 @@
 [web]
 #Password to the website
 password: verysecreT
+#Port to listen on
+port: 5001
 #Your Kindle serial
 #Needed to remove DRM from uploaded books
 kindleserial: xxx

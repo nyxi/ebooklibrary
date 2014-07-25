@@ -4,14 +4,19 @@
     <thead style="cursor:pointer;"><tr>
         <th>Author</th>
         <th>Title</th>
+        <th>Details</th>
         <th>Downloads</th>
         <th>Rating</th>
         <th>Votes</th>
     </tr></thead><tbody>
 {% for item in data -%}
-    <tr>
+    <tr id="{{ item['gr_book_id'] }}">
         <td><a href="/author/{{ item['gr_author_id'] }}">{{ item['author'] }}</a></td>
-        <td><a class="btn btn-info btn-xs" role="button" style="margin-right:10px" href="https://www.goodreads.com/book/show/{{ item['gr_book_id'] }}">Details</a>{{ item['title'] }}</td>
+        <td>{{ item['title'] }}</td>
+        <td>
+            <a class="btn btn-default btn-xs" role="button" style="margin-right:6px" href="https://www.goodreads.com/book/show/{{ item['gr_book_id'] }}">Goodreads</a>
+            <a class="btn btn-primary btn-xs" role="button" style="margin-right:6px" href="http://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Ddigital-text&field-keywords={{ item['title']|replace('#', '%23') }}">Amazon</a>
+        </td>
         <td>
             {% for f in item['filepath'] if 'gr_book_id' in item -%}
                 {% if f[-4:] == 'mobi' -%}

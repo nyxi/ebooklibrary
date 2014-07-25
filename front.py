@@ -9,11 +9,12 @@ import os
 import subprocess
 from werkzeug import secure_filename
 
-#Get password from the config file
+#Get settings from the config file
 config = ConfigParser.SafeConfigParser()
 config.read('config')
-PASSWORD = config.get('web', 'password')
 KSN = config.get('web', 'kindleserial')
+PASSWORD = config.get('web', 'password')
+PORT = int(config.get('web', 'port'))
 ALLOWED_FORMATS = config.get('data', 'formats').split(',')
 BOOKDIR = config.get('data', 'bookdir')
 #Configure Flask
@@ -78,7 +79,7 @@ def upload():
                 os.remove(infile)
                 newfile = '%s_nodrm%s' % (os.path.splitext(filename)[0], os.path.splitext(filename)[1])
                 if os.path.isfile('%s/%s' % (outdir, newfile)):
-                    os.rename('%s/%s' % (outdir, newfile), '%s/%s' % (BOOKDIR, filename))
+                    os.rename('%s/%s' % (outdir, newfile), '%s/%s' % (BOOKDIR, filename.replace('_', ' ')))
                     success = 'Successfully uploaded the file'
                     return index(success=success)
                 else:
@@ -124,4 +125,4 @@ def download():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)

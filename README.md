@@ -3,7 +3,7 @@ Your Library
 
 A basic Flask application providing easy access to your ebook backups on disk with some nice data from Goodreads. Stores the data about each book in local file called "db" to cut down on the number of API calls.
 
-Uses the Bootstrap framework for the HTML/CSS stuff.
+Uses the Bootstrap web framework for the HTML/CSS stuff.
 
 ![ScreenShot](http://nyxi.eu/pics/projects/library.jpg)
 
@@ -14,7 +14,7 @@ On the first run it can take a long time for the website to become available sin
 Step 3 is optional but uploading files won't work without it unless you remove a line or two in `front.py`
 
 1. `pip install -r requirements.txt`
-2. Edit and save "config.sample" as "config"
+2. Edit and save `config.sample` as `config`
 3. Download the dedrm tools from [Apprentice Alf](http://apprenticealf.wordpress.com/) and edit `dedrm.sh` accordingly
 4. `python front.py`
 

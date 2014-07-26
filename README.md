@@ -35,51 +35,57 @@ This procedure replaces step 4 from the "Usage" section.
 1. `pip install supervisor uWSGI`
 2. Install nginx
 3. Put the below somewhere, for instance `/path/to/this/repo/uwsgi_conf.yaml`
-```
-uwsgi:
-  socket: 127.0.0.1:2424
-  master: true
-  wsgi: front:app
-  processes: 4
-  threads: 2
-  log-syslog: true
-```
-4. Put the below in for instance `/etc/nginx/sites-available/library`
-```
-server {
-    listen       80;
-    server_name  library.example.com;
-    client_max_body_size 5M;
-    location / { try_files $uri @app; }
-    location @app {
-        uwsgi_pass 127.0.0.1:2424;
-        include uwsgi_params;
-    }
-}
-```
-5. Finally the config for Supervisord in `/etc/supervisord.conf`
-```
-[unix_http_server]
-file=/tmp/supervisor.sock
-[supervisord]
-logfile=/tmp/supervisord.log
-logfile_maxbytes=50MB
-logfile_backups=10
-loglevel=info
-pidfile=/tmp/supervisord.pid
-nodaemon=false
-minfds=1024
-minprocs=200
-[rpcinterface:supervisor]
-supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
-[supervisorctl]
-serverurl=unix:///tmp/supervisor.sock
 
-[program:library]
-command=/usr/local/bin/uwsgi --yaml uwsgi_conf.yaml
-directory=/path/to/this/repo <<<<< CHANGE THIS
-numprocs=1
-stopsignal=INT
-```
+    ```
+    uwsgi:
+      socket: 127.0.0.1:2424
+      master: true
+      wsgi: front:app
+      processes: 4
+      threads: 2
+      log-syslog: true
+    ```
+
+4. Put the below in for instance `/etc/nginx/sites-available/library`
+
+    ```
+    server {
+        listen       80;
+        server_name  library.example.com;
+        client_max_body_size 5M;
+        location / { try_files $uri @app; }
+        location @app {
+            uwsgi_pass 127.0.0.1:2424;
+            include uwsgi_params;
+        }
+    }
+    ```
+
+5. Finally the config for Supervisord in `/etc/supervisord.conf`
+
+    ```
+    [unix_http_server]
+    file=/tmp/supervisor.sock
+    [supervisord]
+    logfile=/tmp/supervisord.log
+    logfile_maxbytes=50MB
+    logfile_backups=10
+    loglevel=info
+    pidfile=/tmp/supervisord.pid
+    nodaemon=false
+    minfds=1024
+    minprocs=200
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+    [supervisorctl]
+    serverurl=unix:///tmp/supervisor.sock
+    
+    [program:library]
+    command=/usr/local/bin/uwsgi --yaml uwsgi_conf.yaml
+    directory=/path/to/this/repo <<<<< CHANGE THIS
+    numprocs=1
+    stopsignal=INT
+    ```
+
 6. Launch Supervisord (which should in turn launch uWSGI): `supervisord -c /etc/supervisord.conf`
 7. Restart nginx: `service nginx restart`
